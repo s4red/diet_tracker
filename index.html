@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>7-Day Glow Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #D4A853;
+  --gold-light: #F5E6C8;
+  --gold-dark: #9A7535;
+  --green: #4CAF7D;
+  --green-light: #E8F7EE;
+  --green-dark: #2E7D52;
+  --red: #E05C5C;
+  --red-light: #FDEAEA;
+  --blue: #5B9BD5;
+  --blue-light: #E8F2FC;
+  --bg: #FAFAF8;
+  --surface: #FFFFFF;
+  --surface2: #F5F4F0;
+  --border: #EBEBЕ8;
+  --text: #1A1A18;
+  --text2: #6B6B65;
+  --text3: #A8A8A0;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+h1,h2,h3,.syne { font-family: 'Syne', sans-serif; }
+
+/* SPLASH */
+#splash {
+  position: fixed; inset: 0;
+  background: linear-gradient(160deg, #1A1A18 0%, #2C2A20 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 1000;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+#splash.hide { opacity: 0; transform: scale(1.05); pointer-events: none; }
+.splash-emoji { font-size: 64px; margin-bottom: 16px; animation: pulse 2s ease infinite; }
+.splash-title { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+.splash-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-top: 8px; }
+.splash-bar { width: 200px; height: 3px; background: rgba(255,255,255,0.15); border-radius: 2px; margin-top: 32px; overflow: hidden; }
+.splash-progress { height: 100%; background: var(--gold); border-radius: 2px; animation: loadbar 1.8s ease forwards; }
+@keyframes loadbar { from { width: 0; } to { width: 100%; } }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+/* APP */
+#app { max-width: 430px; margin: 0 auto; padding-bottom: 40px; }
+
+/* TOP HEADER */
+.top-header {
+  padding: 20px 20px 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.app-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
+.notif-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--surface); border: 1px solid #EBEBEB;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; cursor: pointer; position: relative;
+  transition: transform 0.2s;
+}
+.notif-btn:active { transform: scale(0.92); }
+.notif-dot {
+  position: absolute; top: 6px; right: 6px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--red); border: 2px solid var(--bg);
+}
+
+/* STREAK HERO */
+.streak-hero {
+  margin: 20px;
+  background: linear-gradient(135deg, #1A1A18 0%, #2E2B1E 100%);
+  border-radius: 24px;
+  padding: 24px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.streak-hero::before {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(212,168,83,0.2) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.streak-row { display: flex; align-items: center; gap: 16px; }
+.streak-flame { font-size: 48px; line-height: 1; }
+.streak-info { flex: 1; }
+.streak-num { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; color: var(--gold); line-height: 1; }
+.streak-label { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+.streak-msg { font-size: 14px; color: rgba(255,255,255,0.85); margin-top: 12px; line-height: 1.5; }
+.week-dots { display: flex; gap: 6px; margin-top: 16px; }
+.week-dot {
+  flex: 1; height: 6px; border-radius: 3px;
+  background: rgba(255,255,255,0.15);
+  transition: background 0.3s;
+}
+.week-dot.done { background: var(--gold); }
+.week-dot.active { background: rgba(212,168,83,0.5); }
+
+/* DAY TABS */
+.day-tabs-wrap { padding: 0 20px; margin-bottom: 4px; }
+.day-tabs-label { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.day-tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.day-tabs::-webkit-scrollbar { display: none; }
+.day-tab {
+  flex-shrink: 0;
+  width: 52px; height: 62px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid #EBEBEB;
+  background: var(--surface);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  gap: 2px;
+}
+.day-tab:active { transform: scale(0.94); }
+.day-tab.active { background: #1A1A18; border-color: #1A1A18; }
+.day-tab.completed { background: var(--green-light); border-color: var(--green); }
+.day-tab .tab-num { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text2); }
+.day-tab.active .tab-num { color: var(--gold); }
+.day-tab.completed .tab-num { color: var(--green-dark); }
+.day-tab .tab-label { font-size: 9px; color: var(--text3); }
+.day-tab.active .tab-label { color: rgba(255,255,255,0.5); }
+.day-tab.completed .tab-label { color: var(--green); }
+.day-tab .tab-check { font-size: 14px; }
+
+/* MAIN CONTENT */
+.day-content { padding: 16px 20px 0; }
+
+/* TIP BANNER */
+.tip-banner {
+  background: var(--gold-light);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.tip-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.tip-text { font-size: 13px; color: var(--gold-dark); line-height: 1.6; }
+.tip-day { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+
+/* MORNING RITUAL */
+.ritual-card {
+  background: linear-gradient(135deg, #EEF4FB 0%, #E8F2FC 100%);
+  border: 1px solid #C8DCEF;
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  display: flex; gap: 12px; align-items: center;
+}
+.ritual-icon { font-size: 28px; }
+.ritual-info { flex: 1; }
+.ritual-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--blue); }
+.ritual-desc { font-size: 12px; color: #4A7BAA; margin-top: 2px; line-height: 1.5; }
+
+/* SECTION TITLE */
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px; font-weight: 700;
+  color: var(--text3); text-transform: uppercase;
+  letter-spacing: 0.08em; margin: 16px 0 8px;
+}
+
+/* PROGRESS BARS */
+.progress-card {
+  background: var(--surface);
+  border: 1px solid #EBEBEB;
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  display: flex; gap: 12px;
+}
+.prog-item { flex: 1; }
+.prog-label { font-size: 11px; color: var(--text3); margin-bottom: 6px; }
+.prog-bar { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
+.prog-fill { height: 100%; border-radius: 3px; transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+.prog-fill.meals { background: var(--green); }
+.prog-fill.water { background: var(--blue); }
+.prog-val { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); }
+
+/* WATER TRACKER */
+.water-card {
+  background: var(--surface);
+  border: 1px solid #EBEBEB;
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.water-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.water-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; }
+.water-count { font-size: 12px; color: var(--text3); }
+.water-glasses { display: flex; gap: 5px; flex-wrap: wrap; }
+.glass {
+  width: 32px; height: 36px;
+  border-radius: 6px;
+  border: 1.5px solid #EBEBEB;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; cursor: pointer;
+  transition: all 0.2s;
+  filter: grayscale(1) opacity(0.4);
+}
+.glass.filled { filter: none; background: var(--blue-light); border-color: var(--blue); transform: scale(1.05); }
+.glass:active { transform: scale(0.9); }
+
+/* MEAL CARDS */
+.meal-card {
+  background: var(--surface);
+  border: 1px solid #EBEBEB;
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.34,1.2,0.64,1);
+  cursor: pointer;
+}
+.meal-card.done { background: var(--green-light); border-color: var(--green); }
+.meal-card.done .meal-name { color: var(--green-dark); }
+.meal-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
+.meal-icon-wrap {
+  width: 42px; height: 42px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.meal-icon-wrap.breakfast { background: var(--gold-light); }
+.meal-icon-wrap.coffee { background: #F0EBE3; }
+.meal-icon-wrap.lunch { background: var(--green-light); }
+.meal-icon-wrap.dinner { background: var(--blue-light); }
+.meal-meta { flex: 1; }
+.meal-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+.meal-time { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.meal-check {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 2px solid #EBEBEB;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.meal-card.done .meal-check { background: var(--green); border-color: var(--green); color: #fff; transform: scale(1.1); }
+.meal-detail {
+  padding: 0 16px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+.meal-card.open .meal-detail { max-height: 400px; padding: 0 16px 14px; }
+.meal-detail-inner {
+  border-top: 1px solid rgba(0,0,0,0.06);
+  padding-top: 12px;
+  font-size: 13px; color: var(--text2); line-height: 1.7;
+}
+.meal-detail-inner strong { color: var(--text); font-weight: 500; }
+.mark-btn {
+  margin-top: 12px; padding: 10px 20px;
+  border-radius: 100px; border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s;
+  background: var(--text); color: #fff;
+}
+.mark-btn:active { transform: scale(0.95); }
+.mark-btn.undo { background: var(--green-light); color: var(--green-dark); }
+
+/* GYM CARD */
+.gym-card {
+  background: var(--surface);
+  border: 1px solid #EBEBEB;
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.gym-card.done-card { background: #FFF0F5; border-color: #E8A0B8; }
+.gym-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; }
+.gym-icon-wrap { width: 42px; height: 42px; border-radius: 12px; background: #FBEAF0; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.gym-meta { flex: 1; }
+.gym-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+.gym-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.gym-actions { display: flex; gap: 6px; }
+.gym-btn {
+  padding: 6px 12px; border-radius: 100px;
+  border: 1.5px solid #EBEBEB; background: var(--surface2);
+  font-size: 11px; font-weight: 500; cursor: pointer;
+  transition: all 0.2s; white-space: nowrap;
+}
+.gym-btn:active { transform: scale(0.92); }
+.gym-btn.done { background: #FBEAF0; border-color: #E8A0B8; color: #9A3560; }
+.gym-btn.skip { background: #FFF8E8; border-color: #E8D0A0; color: #9A7535; }
+.gym-detail { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
+.gym-card.open .gym-detail { max-height: 300px; }
+.gym-detail-inner { padding: 0 16px 14px; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 12px; font-size: 13px; color: var(--text2); line-height: 1.9; }
+.gym-detail-inner { padding: 12px 16px 14px; }
+
+/* DINNER SWAP */
+.swap-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.swap-chip {
+  padding: 6px 14px; border-radius: 100px;
+  border: 1.5px solid #EBEBEB; background: var(--surface2);
+  font-size: 12px; cursor: pointer; transition: all 0.2s;
+}
+.swap-chip.active { background: #1A1A18; color: #fff; border-color: #1A1A18; }
+.swap-chip:active { transform: scale(0.94); }
+
+/* COMPLETE BTN */
+.complete-btn {
+  width: 100%; padding: 16px;
+  border-radius: var(--radius); border: none;
+  font-family: 'Syne', sans-serif;
+  font-size: 16px; font-weight: 700;
+  cursor: pointer; margin-top: 16px;
+  transition: all 0.3s cubic-bezier(0.34,1.3,0.64,1);
+  background: linear-gradient(135deg, #1A1A18, #2E2B1E);
+  color: var(--gold);
+  letter-spacing: 0.02em;
+}
+.complete-btn:active { transform: scale(0.97); }
+.complete-btn.done { background: linear-gradient(135deg, var(--green-dark), #1E5E3A); color: #fff; }
+.complete-btn:disabled { opacity: 0.7; cursor: default; }
+
+/* CELEBRATION OVERLAY */
+#celebrate {
+  position: fixed; inset: 0; z-index: 500;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+#celebrate.show { opacity: 1; pointer-events: all; }
+.celebrate-card {
+  background: #fff; border-radius: 28px;
+  padding: 40px 32px; text-align: center;
+  max-width: 320px; width: 90%;
+  transform: scale(0.8);
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+#celebrate.show .celebrate-card { transform: scale(1); }
+.celebrate-emoji { font-size: 64px; margin-bottom: 12px; animation: bounce 0.6s ease infinite alternate; }
+@keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+.celebrate-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+.celebrate-sub { font-size: 15px; color: var(--text2); line-height: 1.5; margin-bottom: 24px; }
+.celebrate-close {
+  padding: 14px 32px; background: #1A1A18; color: var(--gold);
+  border: none; border-radius: 100px;
+  font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: transform 0.2s;
+}
+.celebrate-close:active { transform: scale(0.95); }
+.confetti-wrap { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+
+/* REMINDER TOAST */
+#toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: #1A1A18; color: #fff;
+  padding: 12px 20px; border-radius: 100px;
+  font-size: 13px; font-weight: 500;
+  z-index: 600; transition: transform 0.4s cubic-bezier(0.34,1.3,0.64,1);
+  white-space: nowrap;
+  display: flex; align-items: center; gap: 8px;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+/* REMINDER MODAL */
+#reminderModal {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+#reminderModal.show { opacity: 1; pointer-events: all; }
+.reminder-sheet {
+  background: #fff; border-radius: 28px 28px 0 0;
+  padding: 28px 24px 40px;
+  width: 100%; max-width: 430px;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.34,1.1,0.64,1);
+}
+#reminderModal.show .reminder-sheet { transform: translateY(0); }
+.reminder-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; margin-bottom: 20px; }
+.reminder-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #EBEBEB; }
+.reminder-row:last-of-type { border-bottom: none; }
+.reminder-label { font-size: 14px; font-weight: 500; }
+.reminder-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.toggle {
+  width: 48px; height: 28px; border-radius: 14px;
+  background: #EBEBEB; position: relative;
+  cursor: pointer; transition: background 0.3s; flex-shrink: 0;
+  border: none; padding: 0;
+}
+.toggle.on { background: var(--green); }
+.toggle::after {
+  content: ''; position: absolute;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #fff; top: 3px; left: 3px;
+  transition: left 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.toggle.on::after { left: 23px; }
+.close-sheet {
+  width: 100%; padding: 14px; margin-top: 8px;
+  background: var(--surface2); border: none; border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-emoji">✨</div>
+  <div class="splash-title">7-Day Glow Up</div>
+  <div class="splash-sub">Your personal transformation plan</div>
+  <div class="splash-bar"><div class="splash-progress"></div></div>
+</div>
+
+<!-- CELEBRATION OVERLAY -->
+<div id="celebrate">
+  <div class="confetti-wrap" id="confettiWrap"></div>
+  <div class="celebrate-card">
+    <div class="celebrate-emoji" id="celebrateEmoji">🎉</div>
+    <div class="celebrate-title" id="celebrateTitle">Day Complete!</div>
+    <div class="celebrate-sub" id="celebrateSub">You crushed it today. Keep the streak alive!</div>
+    <button class="celebrate-close" onclick="closeCelebrate()">Keep Going →</button>
+  </div>
+</div>
+
+<!-- REMINDER MODAL -->
+<div id="reminderModal">
+  <div class="reminder-sheet">
+    <div class="reminder-title">⏰ Reminders</div>
+    <div class="reminder-row">
+      <div>
+        <div class="reminder-label">🌅 Morning ritual</div>
+        <div class="reminder-sub">Lemon water + chia seeds reminder at 7:00 AM</div>
+      </div>
+      <button class="toggle on" id="tog1" onclick="toggleReminder(this)"></button>
+    </div>
+    <div class="reminder-row">
+      <div>
+        <div class="reminder-label">🥗 Lunch reminder</div>
+        <div class="reminder-sub">Don't skip lunch — reminder at 12:30 PM</div>
+      </div>
+      <button class="toggle" id="tog2" onclick="toggleReminder(this)"></button>
+    </div>
+    <div class="reminder-row">
+      <div>
+        <div class="reminder-label">💪 Gym check-in</div>
+        <div class="reminder-sub">Time to move — reminder at 5:00 PM</div>
+      </div>
+      <button class="toggle" id="tog3" onclick="toggleReminder(this)"></button>
+    </div>
+    <div class="reminder-row">
+      <div>
+        <div class="reminder-label">🌙 Daily wrap-up</div>
+        <div class="reminder-sub">Log your day — reminder at 9:00 PM</div>
+      </div>
+      <button class="toggle on" id="tog4" onclick="toggleReminder(this)"></button>
+    </div>
+    <button class="close-sheet" onclick="closeReminders()">Done</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"><span id="toastIcon">✅</span><span id="toastMsg">Done!</span></div>
+
+<!-- APP -->
+<div id="app">
+  <div class="top-header">
+    <div class="app-title syne">Glow Up ✨</div>
+    <button class="notif-btn" onclick="openReminders()">🔔<div class="notif-dot"></div></button>
+  </div>
+  <div class="streak-hero" id="streakHero">
+    <div class="streak-row">
+      <div class="streak-flame">🔥</div>
+      <div class="streak-info">
+        <div class="streak-num" id="streakNum">0</div>
+        <div class="streak-label">day streak</div>
+      </div>
+    </div>
+    <div class="streak-msg" id="streakMsg">Start today and build your streak! 💪</div>
+    <div class="week-dots" id="weekDots"></div>
+  </div>
+  <div class="day-tabs-wrap">
+    <div class="day-tabs-label">Your 7 days</div>
+    <div class="day-tabs" id="dayTabs"></div>
+  </div>
+  <div class="day-content" id="dayContent"></div>
+</div>
+
+<script>
+const dinnerAlts = {
+  0: [
+    { label: "Eggs + hummus", detail: "2 boiled or scrambled eggs + half a cucumber sliced thin + 2 heaped spoonfuls of hummus on the side. Add a sliced tomato if you're hungry. Light, clean, and filling enough to sleep well." },
+    { label: "Yogurt bowl", detail: "Greek yogurt (medium cup) + 1 tbsp chia seeds stirred in + tiny drizzle of honey + a few grapes on top. Very light option if you had a big lunch." },
+    { label: "Veggie omelette", detail: "2-egg omelette filled with sautéed onion, tomato, and a little garlic. Cook in a tiny drop of olive oil. Serve with cucumber slices on the side." }
+  ],
+  1: [
+    { label: "Rice paper rolls", detail: "1–2 rice paper rolls filled with shredded chicken, cucumber strips, avocado slices, and a leaf of salad. Dip in a little lemon juice or hummus. Easy to assemble, very refreshing." },
+    { label: "Egg + salad", detail: "2 boiled eggs + big handful of salad leaves + sliced cucumber + tomato + lemon drizzle. Simple and clean." },
+    { label: "Yogurt + chia", detail: "Greek yogurt (medium cup) + 1 tbsp chia seeds + honey drizzle. Very light — good if you had salmon at lunch." }
+  ],
+  2: [
+    { label: "Yogurt + chia", detail: "Greek yogurt (medium cup) + 1 tbsp chia seeds + tiny drizzle of honey. Light finish to a solid day." },
+    { label: "Eggs + veggies", detail: "2 scrambled eggs with sautéed zucchini, tomato, and garlic. Cook everything in a tiny bit of olive oil. Full plate, light calories." },
+    { label: "Hummus plate", detail: "3 big spoonfuls of hummus + cucumber + tomato + a few olives if you have them. Eat slowly, it's more filling than it looks." }
+  ],
+  3: [
+    { label: "Eggs + veggies", detail: "2 eggs any style + sautéed veggies (zucchini, tomato, onion, garlic) in a tiny bit of olive oil. Full plate of colorful veggies — this is a big but clean dinner." },
+    { label: "Rice paper rolls", detail: "2 rice paper rolls with avocado + cucumber + salmon or chicken. Light and satisfying." },
+    { label: "Yogurt bowl", detail: "Greek yogurt + chia seeds + honey. Very light option — good if you had a big lunch." }
+  ],
+  4: [
+    { label: "Rice paper rolls", detail: "2 rice paper rolls: avocado slices + cucumber strips + chicken or salmon + a leaf of salad. Squeeze of lemon to dip. Fresh and light end to the day." },
+    { label: "Eggs + hummus", detail: "2 boiled eggs + 2 spoonfuls of hummus + sliced cucumber + sliced tomato. Classic clean dinner." },
+    { label: "Oats bowl", detail: "Medium bowl of oats + Greek yogurt dollop + chia seeds + tiny honey drizzle. Warm and comforting." }
+  ],
+  5: [
+    { label: "Oats bowl", detail: "Medium bowl of oats cooked with water or milk + Greek yogurt dollop + chia seeds stirred in + tiny honey drizzle. Warm and comforting dinner." },
+    { label: "Eggs + salad", detail: "2 boiled or poached eggs + big salad with avocado, cucumber, tomato, and lemon drizzle. Clean and satisfying." },
+    { label: "Hummus plate", detail: "3 big spoonfuls of hummus + cucumber + tomato + rice paper crackers if you have them." }
+  ],
+  6: [
+    { label: "Eggs + hummus", detail: "2 eggs + 2 spoonfuls of hummus + cucumber slices + tomato. Light, clean finish to your last day." },
+    { label: "Yogurt + chia", detail: "Greek yogurt + chia seeds + honey + a few grapes. Simple and effective." },
+    { label: "Salmon + salad", detail: "Small piece of salmon + a fresh side salad with lemon. Go out strong on the last dinner!" }
+  ]
+};
+
+const plan = [
+  {
+    day:1, name:"Reset Day", tip:"Today is day one — the hardest step is always the first. Start with lemon water the moment you wake up, before your phone, before anything.",
+    gym:true,
+    gymDetail:"Warm-up: 5 min brisk treadmill walk\n\n🔥 Belly circuit:\n• Plank: 3 × 30 sec\n• Crunches: 3 × 15\n• Leg raises: 3 × 12\n\n💪 Arms:\n• Tricep pushdowns: 3 × 12\n• Bicep curls: 3 × 12\n• Shoulder press: 3 × 10\n\n🏃 Cardio: 20 min treadmill or elliptical — pace where talking is hard",
+    meals:[
+      {type:"breakfast",icon:"🥣",label:"Breakfast",time:"7:00 – 9:00 AM",
+       detail:"<strong>Oat + yogurt bowl</strong><br><br>Cook a medium bowl of oats with water or non-fat milk until thick and creamy. While still warm, stir in 1 tablespoon of chia seeds — they'll absorb and get pudding-like. Spoon a good dollop of Greek yogurt on top, add a small handful of grapes, and finish with a tiny drizzle of honey. The yogurt melts slightly into the warm oats. Filling, protein-packed, and actually delicious."},
+      {type:"coffee",icon:"☕",label:"Morning coffee",time:"After breakfast",
+       detail:"1 cup black coffee — no sugar, no sweetener. <strong>Non-fat milk is fine</strong> if you need it. Wait until after breakfast so it doesn't spike your appetite or stress hormones on an empty stomach."},
+      {type:"lunch",icon:"🥗",label:"Lunch",time:"12:00 – 2:00 PM",
+       detail:"<strong>Grilled chicken + big salad</strong><br><br>Grill or pan-cook a palm-sized chicken breast with a little garlic and olive oil. Serve on top of a large plate of: a handful of salad leaves, half a cucumber sliced, 1 chopped tomato, half an onion sliced thin. Dress with a squeeze of half a lemon + a small drizzle of olive oil. <strong>No bottled dressing.</strong> This is your biggest meal — eat it slowly."},
+      {type:"dinner",icon:"🍳",label:"Dinner",time:"6:00 – 8:00 PM", isDinner:true, dinnerIdx:0,
+       detail:"2 boiled or scrambled eggs + half a cucumber sliced thin + 2 heaped spoonfuls of hummus on the side. Add a sliced tomato if you're hungry. Light, clean, and filling enough to sleep well."}
+    ]
+  },
+  {
+    day:2, name:"Protein Boost", tip:"Salmon today is doing heavy lifting — omega-3s reduce inflammation which is a major cause of belly bloat. Drink a glass of water between every meal.",
+    gym:false,
+    gymDetail:"",
+    meals:[
+      {type:"breakfast",icon:"🥣",label:"Breakfast",time:"7:00 – 9:00 AM",
+       detail:"<strong>Oat + yogurt bowl</strong><br><br>Same as Day 1 — oats cooked with water or non-fat milk + 1 tbsp chia seeds stirred in while warm + dollop of Greek yogurt on top + small handful of grapes + tiny drizzle of honey. This is your anchor breakfast this week. If you want variety, swap grapes for a sliced banana."},
+      {type:"coffee",icon:"☕",label:"Morning coffee",time:"After breakfast",
+       detail:"1 cup black coffee — no sugar. Non-fat milk is okay. Keep it simple."},
+      {type:"lunch",icon:"🐟",label:"Lunch",time:"12:00 – 2:00 PM",
+       detail:"<strong>Roasted salmon + veggie plate</strong><br><br>Season a palm-sized salmon fillet with garlic, lemon juice, salt, and a drizzle of olive oil. Roast at medium-high heat for about 12–15 min (or pan-fry 4 min each side). Serve with a full plate of roasted or raw veggies: tomato, onion, zucchini, whatever you have. The veggies should take up most of the plate — salmon is the star, not the bulk."},
+      {type:"dinner",icon:"🌯",label:"Dinner",time:"6:00 – 8:00 PM", isDinner:true, dinnerIdx:1,
+       detail:"1–2 rice paper rolls filled with shredded chicken, cucumber strips, avocado slices, and a leaf of salad. Dip in a little lemon juice or hummus. Easy to assemble, very refreshing."}
+    ]
+  },
+  {
+    day:3, name:"Recovery Day", tip:"If you hit the gym yesterday, your muscles are rebuilding right now. Feed them clean protein. The small rice portion today is your reward for training — skip it if it's a rest day.",
+    gym:true,
+    gymDetail:"Warm-up: 5 min walk on treadmill\n\n💪 Arms + shoulders:\n• Shoulder press: 3 × 12\n• Lateral raises: 3 × 12\n• Tricep dips or pushdowns: 3 × 15\n\n🔥 Core:\n• Bicycle crunches: 3 × 20\n• Mountain climbers: 3 × 20\n• Reverse crunches: 3 × 15\n\n🏃 Cardio: 20 min your choice",
+    meals:[
+      {type:"breakfast",icon:"🍳",label:"Breakfast",time:"7:00 – 9:00 AM",
+       detail:"<strong>Scrambled eggs + veggies</strong><br><br>Scramble 2 eggs in a non-stick pan with a tiny drop of olive oil. Season with salt. Serve with sliced tomato and a few cucumber slices on the side. Quick, high-protein start that digests easily before training. If you're not going to the gym today, add a slice of whole grain bread if you have it."},
+      {type:"coffee",icon:"☕",label:"Morning coffee",time:"After breakfast",
+       detail:"1 cup black coffee — no sugar. Non-fat milk is okay. Your pre-workout boost if you're hitting the gym later."},
+      {type:"lunch",icon:"🍗",label:"Lunch",time:"12:00 – 2:00 PM",
+       detail:"<strong>Chicken + rice + salad</strong> (gym days only — skip rice on rest days)<br><br>Grill a palm-sized chicken breast. Serve with a fist-sized portion of cooked white or brown rice on the side — this is your carb fuel if you trained. Add a side salad: cucumber, tomato, lemon squeeze. On rest days, skip the rice and double the salad."},
+      {type:"dinner",icon:"🥛",label:"Dinner",time:"6:00 – 8:00 PM", isDinner:true, dinnerIdx:2,
+       detail:"Greek yogurt (medium cup) + 1 tbsp chia seeds + tiny drizzle of honey. Light finish to a solid day."}
+    ]
+  },
+  {
+    day:4, name:"Midpoint 🎯", tip:"You are halfway! Look in the mirror today — your face should already look less puffy. Avocado at lunch gives you healthy fat that keeps you full AND helps your body absorb nutrients.",
+    gym:true,
+    gymDetail:"Warm-up: 5 min jog\n\n🔥 Core blast:\n• Plank: 3 × 40 sec\n• Leg raises: 3 × 15\n• Side plank: 2 × 20 sec each side\n\n💪 Arms:\n• Bicep curls: 3 × 12\n• Tricep pushdowns: 3 × 12\n• Shoulder press: 3 × 12\n\n🏃 Cardio: 25 min — push a little harder today",
+    meals:[
+      {type:"breakfast",icon:"🥣",label:"Breakfast",time:"7:00 – 9:00 AM",
+       detail:"<strong>Oat + yogurt bowl</strong><br><br>Oats cooked with water or non-fat milk + 1 tbsp chia seeds stirred in while warm + dollop of Greek yogurt + grapes + tiny drizzle of honey. You know the drill by now. This breakfast is working for you — trust the process."},
+      {type:"coffee",icon:"☕",label:"Morning coffee",time:"After breakfast",
+       detail:"1 cup black coffee — no sugar. Non-fat milk is okay. You're halfway through the week. Celebrate with a good coffee moment."},
+      {type:"lunch",icon:"🐟",label:"Lunch",time:"12:00 – 2:00 PM",
+       detail:"<strong>Salmon + avocado salad</strong><br><br>Pan-fry or roast a palm-sized salmon fillet. Serve on top of a big salad: cucumber, tomato, half an avocado sliced, a handful of salad leaves. Dress with lemon juice and a tiny olive oil drizzle. Add 2 spoonfuls of hummus on the side for extra protein. This is your best meal of the week so far."},
+      {type:"dinner",icon:"🥦",label:"Dinner",time:"6:00 – 8:00 PM", isDinner:true, dinnerIdx:3,
+       detail:"2 eggs any style + sautéed veggies (zucchini, tomato, onion, garlic) in a tiny bit of olive oil. Full plate of colorful veggies — this is a big but clean dinner."}
+    ]
+  },
+  {
+    day:5, name:"Strong Day 💪", tip:"Your body is adapting. The gym feels a little easier today. Small potato portion is only for gym days — the carbs are fuel for your workout, not extra calories.",
+    gym:true,
+    gymDetail:"Warm-up: 5 min bike or rowing machine\n\n🏋️ Full body circuit — 3 rounds:\n• 15 squats\n• 12 push-ups\n• 10 dumbbell rows each side\n• 20 sec plank\n• Rest 60 sec between rounds\n\n💪 Arms finisher:\n• Curls: 3 × 12\n• Tricep extensions: 3 × 12\n\n🏃 Cardio: 20 min — you choose",
+    meals:[
+      {type:"breakfast",icon:"🥛",label:"Breakfast",time:"7:00 – 9:00 AM",
+       detail:"<strong>Yogurt + chia bowl</strong><br><br>Greek yogurt (medium cup) + 1 tbsp chia seeds stirred in + small handful of grapes + tiny honey drizzle. Slightly lighter than the oat bowl — good for days when your stomach feels full in the morning. High in protein, keeps you going until lunch."},
+      {type:"coffee",icon:"☕",label:"Morning coffee",time:"After breakfast",
+       detail:"1 cup black coffee — no sugar. Non-fat milk is okay. Day 5 — you're doing amazing."},
+      {type:"lunch",icon:"🥗",label:"Lunch",time:"12:00 – 2:00 PM",
+       detail:"<strong>Chicken + roasted potato + salad</strong> (potato only on gym days)<br><br>Grill a palm-sized chicken breast. Roast a fist-sized portion of potatoes cut into chunks with olive oil, garlic, and a pinch of salt until golden. Serve with a side salad: salad leaves, cucumber, tomato, lemon. On rest days, skip potatoes and double the salad with avocado instead."},
+      {type:"dinner",icon:"🌯",label:"Dinner",time:"6:00 – 8:00 PM", isDinner:true, dinnerIdx:4,
+       detail:"2 rice paper rolls: avocado slices + cucumber strips + chicken or salmon + a leaf of salad. Squeeze of lemon to dip. Fresh and light end to the day."}
+    ]
+  },
+  {
+    day:6, name:"Almost There ✨", tip:"One day left after today. Your face is looking slimmer, your stomach is flatter. Keep going — do NOT fall off the last stretch. Avocado in the big salad today keeps you full all afternoon.",
+    gym:false,
+    gymDetail:"",
+    meals:[
+      {type:"breakfast",icon:"🍳",label:"Breakfast",time:"7:00 – 9:00 AM",
+       detail:"<strong>Eggs + tomato</strong><br><br>2 eggs scrambled or boiled. Serve with 1 sliced tomato and a few cucumber slices. Simple, fast, protein-packed. This is a lighter breakfast to set you up for the big salad at lunch."},
+      {type:"coffee",icon:"☕",label:"Morning coffee",time:"After breakfast",
+       detail:"1 cup black coffee — no sugar. Non-fat milk is okay. Second to last morning of the plan!"},
+      {type:"lunch",icon:"🥗",label:"Lunch",time:"12:00 – 2:00 PM",
+       detail:"<strong>The big power salad</strong><br><br>This is your main meal today — make it massive. In a large bowl: a big handful of salad greens, half a cucumber sliced, 1 tomato chopped, half an avocado sliced, a palm-sized piece of grilled chicken cut into strips. Dress with lemon juice and a tiny olive oil drizzle. Season with salt. Eat slowly — this should keep you full until dinner."},
+      {type:"dinner",icon:"🥣",label:"Dinner",time:"6:00 – 8:00 PM", isDinner:true, dinnerIdx:5,
+       detail:"Medium bowl of oats cooked with water or milk + Greek yogurt dollop + chia seeds stirred in + tiny honey drizzle. Warm and comforting dinner."}
+    ]
+  },
+  {
+    day:7, name:"Finish Strong 🏆", tip:"Last day. You made it to day 7. Take a photo today and compare to day 1. Eat clean, hit the gym one more time, and celebrate what you've done for yourself.",
+    gym:true,
+    gymDetail:"Warm-up: 5 min walk\n\n🏆 Final best-effort circuit — 3 rounds:\n• Plank: 45 sec\n• 15 crunches\n• 15 leg raises\n• 12 bicep curls\n• 12 tricep pushdowns\n• Mountain climbers: 20\n\n🏃 Cardio: 25 min — FINISH STRONG\n\nYou've earned every minute of this workout 💪",
+    meals:[
+      {type:"breakfast",icon:"🥛",label:"Breakfast",time:"7:00 – 9:00 AM",
+       detail:"<strong>Yogurt + chia bowl</strong><br><br>Greek yogurt (medium cup) + 1 tbsp chia seeds + tiny drizzle of honey. Light and clean start to your final day. You've been eating well all week — your body knows how to use this fuel now."},
+      {type:"coffee",icon:"☕",label:"Morning coffee",time:"After breakfast",
+       detail:"1 cup black coffee — no sugar. Non-fat milk is okay. Last day coffee hits different. ☕"},
+      {type:"lunch",icon:"🐟",label:"Lunch",time:"12:00 – 2:00 PM",
+       detail:"<strong>Salmon + avocado — your best meal</strong><br><br>Pan-fry or roast a palm-sized salmon fillet until golden. Serve on top of a big fresh salad: salad leaves, cucumber, tomato, half avocado sliced, lemon juice drizzle + tiny olive oil. This is your reward meal — make it beautiful. Eat it slowly and feel proud."},
+      {type:"dinner",icon:"🍳",label:"Dinner",time:"6:00 – 8:00 PM", isDinner:true, dinnerIdx:6,
+       detail:"2 eggs + 2 spoonfuls of hummus + cucumber slices + tomato. Light, clean finish to your final day."}
+    ]
+  }
+];
+
+let state = JSON.parse(localStorage.getItem('glowup7') || 'null') || {
+  currentDay: 0, completedDays: [], meals: {}, water: {}, gym: {}, gymSkipped: {}, openMeal: null, dinnerChoice: {}
+};
+function save() { try { localStorage.setItem('glowup7', JSON.stringify(state)); } catch(e) {} }
+
+// AUDIO
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+function playTone(freq, dur, type='sine', vol=0.3) {
+  try {
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = type; osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    osc.start(); osc.stop(ctx.currentTime + dur);
+  } catch(e) {}
+}
+function playCheck() {
+  playTone(523, 0.1); setTimeout(()=>playTone(659, 0.1), 80); setTimeout(()=>playTone(784, 0.2), 160);
+}
+function playWater() { playTone(880, 0.15, 'sine', 0.2); }
+function playComplete() {
+  [523,659,784,1047].forEach((f,i) => setTimeout(()=>playTone(f,0.25),i*100));
+}
+function playStreak() {
+  [784,880,1047,1319].forEach((f,i) => setTimeout(()=>playTone(f,0.3),i*80));
+}
+
+// TOAST
+let toastTimer;
+function showToast(msg, icon='✅') {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('toastIcon').textContent = icon;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+// CELEBRATE
+function celebrate(emoji, title, sub) {
+  document.getElementById('celebrateEmoji').textContent = emoji;
+  document.getElementById('celebrateTitle').textContent = title;
+  document.getElementById('celebrateSub').textContent = sub;
+  document.getElementById('celebrate').classList.add('show');
+  spawnConfetti();
+  playStreak();
+}
+function closeCelebrate() {
+  document.getElementById('celebrate').classList.remove('show');
+}
+function spawnConfetti() {
+  const wrap = document.getElementById('confettiWrap');
+  wrap.innerHTML = '';
+  const colors = ['#D4A853','#4CAF7D','#5B9BD5','#E05C5C','#9B59B6'];
+  for (let i = 0; i < 60; i++) {
+    const c = document.createElement('div');
+    const color = colors[Math.floor(Math.random()*colors.length)];
+    const size = 6 + Math.random()*8;
+    c.style.cssText = `position:absolute;width:${size}px;height:${size}px;background:${color};border-radius:${Math.random()>0.5?'50%':'2px'};left:${Math.random()*100}%;top:-20px;opacity:0;animation:fall${i%3} ${1.5+Math.random()*1.5}s ${Math.random()*0.8}s ease-in forwards`;
+    wrap.appendChild(c);
+  }
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fall0{to{top:110%;transform:rotate(${Math.random()*360}deg);opacity:0}}
+    @keyframes fall1{to{top:110%;transform:rotate(-${Math.random()*360}deg) translateX(${(Math.random()-0.5)*100}px);opacity:0}}
+    @keyframes fall2{50%{opacity:1}to{top:110%;transform:rotate(${Math.random()*720}deg) translateX(${(Math.random()-0.5)*60}px);opacity:0}}
+  `;
+  wrap.appendChild(style);
+}
+
+// REMINDERS
+function openReminders() { document.getElementById('reminderModal').classList.add('show'); }
+function closeReminders() { document.getElementById('reminderModal').classList.remove('show'); }
+function toggleReminder(btn) { btn.classList.toggle('on'); showToast(btn.classList.contains('on') ? 'Reminder on' : 'Reminder off', '🔔'); }
+
+// STREAK
+function getStreak() {
+  let s = 0;
+  for (let i = state.currentDay; i >= 0; i--) {
+    if (state.completedDays.includes(i)) s++; else break;
+  }
+  return s;
+}
+
+// RENDER
+function renderAll() {
+  renderHero(); renderTabs(); renderDay(state.currentDay);
+}
+
+function renderHero() {
+  const s = getStreak();
+  document.getElementById('streakNum').textContent = s;
+  const msgs = [
+    "Start today and build your streak! 💪",
+    "1 day down. You already beat yesterday's you.",
+    "2 days strong. Your metabolism is already shifting.",
+    "Halfway there. Keep that streak alive! 🔥",
+    "4 days in — your body is thanking you.",
+    "5 down! You can literally see the difference now.",
+    "Day 6 — one more sleep. Don't stop.",
+    "FULL WEEK COMPLETE. You're a different person. 🏆"
+  ];
+  document.getElementById('streakMsg').textContent = msgs[Math.min(s, 7)];
+  const dots = document.getElementById('weekDots');
+  dots.innerHTML = plan.map((_,i) => {
+    const cls = state.completedDays.includes(i) ? 'done' : i === state.currentDay ? 'active' : '';
+    return `<div class="week-dot ${cls}"></div>`;
+  }).join('');
+}
+
+function renderTabs() {
+  document.getElementById('dayTabs').innerHTML = plan.map((p,i) => {
+    const done = state.completedDays.includes(i);
+    const active = i === state.currentDay;
+    return `<div class="day-tab ${active?'active':''} ${done?'completed':''}" onclick="selectDay(${i})">
+      <span class="tab-num">${i+1}</span>
+      <
+    </div>`;
+  }).join('');
+}
+
+function renderDay(d) {
+  const p = plan[d];
+  const dayDone = state.completedDays.includes(d);
+  const totalMeals = p.meals.length;
+  const doneMeals = p.meals.filter((_,i) => state.meals[d+'_'+i]).length;
+  const water = state.water[d] || 0;
+
+  let html = `
+    <div class="tip-banner">
+      <div class="tip-icon">💡</div>
+      <div class="tip-text">
+        <div class="tip-day">Day ${d+1} — ${p.name}</div>
+        ${p.tip}
+      </div>
+    </div>
+
+    <div class="ritual-card">
+      <div class="ritual-icon">🍋</div>
+      <div class="ritual-info">
+        <div class="ritual-title">Morning ritual — before everything</div>
+        <div class="ritual-desc">1 big glass of water + squeeze of half a lemon. Then 1 tbsp chia seeds soaked in a small cup of water or milk for 10 minutes.</div>
+      </div>
+    </div>
+
+    <div class="progress-card">
+      <div class="prog-item">
+        <div class="prog-label">Meals</div>
+        <div class="prog-bar"><div class="prog-fill meals" style="width:${Math.round(doneMeals/totalMeals*100)}%"></div></div>
+        <div class="prog-val">${doneMeals}/${totalMeals}</div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-label">Water glasses</div>
+        <div class="prog-bar"><div class="prog-fill water" style="width:${Math.round(water/8*100)}%"></div></div>
+        <div class="prog-val">${water}/8</div>
+      </div>
+    </div>
+
+    <div class="water-card">
+      <div class="water-top">
+        <div class="water-title">💧 Water tracker</div>
+        <div class="water-count">${water} of 8 glasses</div>
+      </div>
+      <div class="water-glasses">
+        ${Array.from({length:8},(_,i)=>`<div class="glass ${i<water?'filled':''}" onclick="tapWater(${d},${i})">💧</div>`).join('')}
+      </div>
+    </div>
+
+    <div class="section-title">Today's meals</div>
+    ${p.meals.map((m,i) => renderMealCard(d,m,i)).join('')}
+
+    <div class="section-title">Movement</div>
+    ${renderGymCard(d)}
+
+    ${dayDone
+      ? `<button class="complete-btn done" disabled>Day ${d+1} complete ✓</button>`
+      : `<button class="complete-btn" onclick="completeDay(${d})">Complete Day ${d+1} →</button>`
+    }
+    <div style="height:20px;"></div>
+  `;
+
+  document.getElementById('dayContent').innerHTML = html;
+}
+
+function renderMealCard(d, m, i) {
+  const key = d+'_'+i;
+  const done = !!state.meals[key];
+  const open = state.openMeal === key;
+
+  let detail = m.detail;
+  let extraHTML = '';
+
+  if (m.isDinner) {
+    const chosen = state.dinnerChoice[d] !== undefined ? state.dinnerChoice[d] : 0;
+    const alts = dinnerAlts[d];
+    detail = alts[chosen].detail;
+    extraHTML = `<div style="margin-top:10px;"><div style="font-size:11px;color:var(--text3);margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;">Swap dinner option</div>
+      <div class="swap-row">${alts.map((a,ai)=>`<div class="swap-chip ${ai===chosen?'active':''}" onclick="swapDinner(${d},${ai},event)">${a.label}</div>`).join('')}</div></div>`;
+  }
+
+  return `<div class="meal-card ${done?'done':''} ${open?'open':''}" onclick="toggleMeal('${key}')">
+    <div class="meal-header">
+      <div class="meal-icon-wrap ${m.type}">${m.icon}</div>
+      <div class="meal-meta">
+        <div class="meal-name">${m.label}</div>
+        <div class="meal-time">${m.time}</div>
+      </div>
+      <div class="meal-check">${done?'✓':''}</div>
+    </div>
+    <div class="meal-detail">
+      <div class="meal-detail-inner">
+        ${detail}
+        ${extraHTML}
+        <div><button class="mark-btn ${done?'undo':''}" onclick="event.stopPropagation();markMeal('${key}',${!done})">
+          ${done?'✓ Done — tap to undo':'Mark as done ✓'}
+        </button></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderGymCard(d) {
+  const p = plan[d];
+  const done = !!state.gym[d];
+  const skipped = !!state.gymSkipped[d];
+  const open = state.openMeal === 'gym_'+d;
+
+  if (!p.gym) {
+    return `<div class="gym-card">
+      <div class="gym-header">
+        <div class="gym-icon-wrap">🚶</div>
+        <div class="gym-meta">
+          <div class="gym-name">Rest day</div>
+          <div class="gym-sub">Take a 20–30 min walk outside — still burns fat and reduces bloat</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  const statusBadge = done ? '<span style="font-size:12px;color:var(--green-dark);font-weight:500;">✓ Done</span>'
+    : skipped ? '<span style="font-size:12px;color:var(--gold-dark);font-weight:500;">⟳ Skipped</span>' : '';
+
+  return `<div class="gym-card ${open?'open':''} ${done?'done-card':''}">
+    <div class="gym-header" onclick="toggleMeal('gym_${d}')">
+      <div class="gym-icon-wrap">${done?'💪':skipped?'🔄':'🏋️'}</div>
+      <div class="gym-meta">
+        <div class="gym-name">Gym session ${statusBadge}</div>
+        <div class="gym-sub">~45–50 min · arms + belly + cardio</div>
+      </div>
+      <div class="gym-actions" onclick="event.stopPropagation()">
+        ${!done && !skipped ? `<button class="gym-btn skip" onclick="skipGym(${d})">Skip</button>` : ''}
+        <button class="gym-btn ${done?'done':''}" onclick="toggleGym(${d})">${done?'✓ Done':'Done'}</button>
+      </div>
+    </div>
+    <div class="gym-detail">
+      <div class="gym-detail-inner">${p.gymDetail.replace(/\n/g,'<br>')}
+        ${skipped && !done ? `<div style="margin-top:12px;padding:10px 14px;background:#FFF8E8;border-radius:10px;font-size:12px;color:var(--gold-dark);">💛 Skipped today — that's okay. Try to make it tomorrow. A 20-min walk today still counts.</div>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+// INTERACTIONS
+function selectDay(d) { state.currentDay = d; save(); renderAll(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function toggleMeal(key) {
+  state.openMeal = state.openMeal === key ? null : key;
+  renderDay(state.currentDay);
+}
+
+function markMeal(key, val) {
+  state.meals[key] = val;
+  state.openMeal = null;
+  save();
+  if (val) { playCheck(); showToast('Meal logged!', '✅'); }
+  renderDay(state.currentDay);
+  renderHero();
+}
+
+function tapWater(d, i) {
+  const cur = state.water[d] || 0;
+  state.water[d] = i < cur ? i : i+1;
+  save(); playWater();
+  const newVal = state.water[d];
+  if (newVal === 8) showToast('8 glasses done! Incredible! 💧', '🎉');
+  else showToast(`${newVal} glass${newVal>1?'es':''} logged`, '💧');
+  renderDay(d); renderHero();
+}
+
+function toggleGym(d) {
+  state.gym[d] = !state.gym[d];
+  if (state.gym[d]) { state.gymSkipped[d] = false; playCheck(); showToast('Gym session logged! 💪', '🏋️'); }
+  save(); renderDay(d);
+}
+
+function skipGym(d) {
+  state.gymSkipped[d] = true;
+  save(); showToast('Gym skipped — a walk still counts! 🚶', '💛');
+  renderDay(d);
+}
+
+function swapDinner(d, idx, e) {
+  e.stopPropagation();
+  state.dinnerChoice[d] = idx;
+  save(); showToast('Dinner swapped!', '🔄');
+  renderDay(d);
+}
+
+function completeDay(d) {
+  if (!state.completedDays.includes(d)) state.completedDays.push(d);
+  playComplete();
+  save();
+
+  const s = getStreak();
+  const celebMsgs = [
+    ['🎉', 'Day 1 Done!', 'First step taken. The hardest one. You should be proud.'],
+    ['🔥', 'Day 2 Complete!', '2-day streak! Your body is already shifting gears.'],
+    ['⚡', 'Day 3 Crushed!', '3 days strong. Halfway through the week. Look at you!'],
+    ['🌟', 'Day 4 Complete!', 'You hit the midpoint! Check the mirror — notice anything?'],
+    ['💪', 'Day 5 Done!', '5-day streak! Most people quit before this. You didn\'t.'],
+    ['✨', 'Day 6 Complete!', 'ONE MORE DAY. You are so close. Don\'t stop now!'],
+    ['🏆', 'FULL WEEK DONE!', '7 days. Clean eating, movement, water. You actually did it!']
+  ];
+  const [emoji, title, sub] = celebMsgs[d];
+  setTimeout(() => celebrate(emoji, title, sub), 300);
+
+  if (d < 6) state.currentDay = d+1;
+  save(); renderAll();
+}
+
+// INIT
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hide');
+    setTimeout(() => document.getElementById('splash').remove(), 700);
+  }, 2000);
+  renderAll();
+});
+
+// Fix tab label rendering issue
+function fixTabs() {
+  document.getElementById('dayTabs').innerHTML = plan.map((p,i) => {
+    const done = state.completedDays.includes(i);
+    const active = i === state.currentDay;
+    return `<div class="day-tab ${active?'active':''} ${done?'completed':''}" onclick="selectDay(${i})">
+      <span class="tab-num">${i+1}</span>
+      <span class="tab-label">${done?'✓':'Day '+(i+1)}</span>
+    </div>`;
+  }).join('');
+}
+</script>
+</body>
+</html>
